@@ -13,9 +13,12 @@ services:
       - db
     command: >
       sh -c "
+        echo 'Esperando a que Postgres esté listo...' &&
+        sleep 10 &&
         python manage.py migrate &&
-        python manage.py importar_horarios &&
-        gunicorn horario.wsgi:application --bind 0.0.0.0:8000
+        python manage.py loaddata horario/fixtures/grupos.json &&
+        python manage.py importar &&
+        gunicorn mysite.wsgi:application --bind 0.0.0.0:8000
       "
 
   frontend:

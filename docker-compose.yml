@@ -1,0 +1,41 @@
+services:
+  backend:
+    build:
+      context: ./Horario_API
+    container_name: horario_backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./Horario_API:/app
+    env_file:
+      - ./Horario_API/.env
+    depends_on:
+      - db
+    command: >
+      sh -c "
+        python manage.py migrate &&
+        python manage.py importar_horarios &&
+        gunicorn horario.wsgi:application --bind 0.0.0.0:8000
+      "
+
+  frontend:
+    build:
+      context: ./horario-project
+    container_name: horario_frontend
+    ports:
+      - "3000:80"
+    volumes:
+      - ./horario-project:/app
+
+  db:
+    image: postgres:15
+    container_name: horario_postgres
+    ports:
+      - "5432:5432"
+    env_file:
+      - ./Horario_API/.env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

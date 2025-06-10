@@ -1,26 +1,4 @@
 services:
-  backend:
-    build:
-      context: ./Horario_API
-    container_name: horario_backend
-    ports:
-      - "8000:8000"
-    volumes:
-      - ./Horario_API:/app
-    env_file:
-      - ./Horario_API/.env
-    depends_on:
-      - db
-    command: >
-      sh -c "
-        echo 'Esperando a que Postgres esté listo...' &&
-        sleep 10 &&
-        python manage.py migrate &&
-        python manage.py loaddata horario/fixtures/grupos.json &&
-        python manage.py importar &&
-        gunicorn mysite.wsgi:application --bind 0.0.0.0:8000
-      "
-
   frontend:
     build:
       context: ./horario-project
@@ -29,16 +7,25 @@ services:
       - "3000:80"
     volumes:
       - ./horario-project:/app
+    networks:
+      - app_network
 
   db:
     image: postgres:15
-    container_name: horario_postgres
+    container_name: mi_postgres
     ports:
       - "5432:5432"
-    env_file:
-      - ./Horario_API/.env
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    env_file:
+      - ./Horario_API/.env
+    networks:
+      - app_network
+    restart: always
 
 volumes:
   postgres_data:
+
+networks:
+  app_network:
+    driver: bridge

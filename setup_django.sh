@@ -9,11 +9,12 @@ fi
 
 # Crear entorno virtual si no existe
 if [ ! -d ".venv" ]; then
+  sudo apt install -y python3-venv python3-pip python3-dev
   python3 -m venv .venv
 fi
 
-# Activar entorno virtual
 source .venv/bin/activate
+
 
 # Instalar dependencias
 pip install --upgrade pip

@@ -7,7 +7,7 @@ const clientSecret = import.meta.env.VITE_CLIENT_SECRET;
 
 // Instancia básica sin token
 const apiClient = axios.create({
-  baseURL: 'http://localhost:8000/api/',
+  baseURL: 'http://host.docker.internal:8000/api/',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -51,7 +51,7 @@ export const setAuthToken = token => {
 
 // Función para obtener token OAuth2
 export const obtenerToken = async (usuario, password) => {
-  const tokenURL = 'http://localhost:8000/oauth2/token/';
+  const tokenURL = 'http://host.docker.internal:8000/oauth2/token/';
   const params = new URLSearchParams();
   params.append('grant_type', 'password');
   params.append('username', usuario);
@@ -95,7 +95,7 @@ export const logout = async () => {
   const refreshToken = localStorage.getItem('refresh_token');
   const sesionStore = useSesionStore();
   if (refreshToken) {
-    const revokeURL = 'http://127.0.0.1:8000/oauth2/revoke_token/';
+    const revokeURL = 'http://host.docker.internal:8000/oauth2/revoke_token/';
     const params = new URLSearchParams();
     params.append('token', refreshToken);
     params.append('client_id', clientId);
@@ -224,7 +224,7 @@ export const enviarParteAusencias = async (pdfBlob, fecha) => {
   const formData = new FormData();
   formData.append('pdf', pdfBlob, `parte_ausencias_${fecha}.pdf`);
 
-  const response = await apiClient.post('http://127.0.0.1:8000/api/ausencias/enviar-parte/', formData, {
+  const response = await apiClient.post('http://host.docker.internal:8000/api/ausencias/enviar-parte/', formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },

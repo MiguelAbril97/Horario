@@ -9,6 +9,8 @@ services:
       - ./horario-project:/app
     networks:
       - app_network
+    extra_hosts:
+      - "host.docker.internal:host-gateway"  # 👈 Añadido para acceso al host
 
   db:
     image: postgres:15

@@ -95,7 +95,7 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const sesionStore = useSesionStore()
-  const publicPages = ['login', 'password_reset']
+  const publicPages = ['login', 'recuperar-password','ResetPassword']
   if (!publicPages.includes(to.name) && !sesionStore.isAuthenticated) {
     next({ name: 'login' })
   } else {

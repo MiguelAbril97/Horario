@@ -53,6 +53,6 @@ const iniciarSesion = async () => {
       </div>
     </div>
     <div class="text-center mt-3">
-      <router-link to="/recuperar-password">¿Olvidaste tu contraseña?</router-link>
+      <RouterLink to="/recuperar-password">¿Olvidaste tu contraseña?</RouterLink>
     </div>
 </template>

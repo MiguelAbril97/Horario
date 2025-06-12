@@ -22,7 +22,7 @@ def password_reset_token_created(sender, instance, reset_password_token, *args, 
     front_url = env("FRONTEND_URL")
     context = {
         'email': reset_password_token.user.email,
-        'reset_password_url': f"{front_url}reset-password?token={reset_password_token.key}"
+        'reset_password_url': f"{front_url}/reset-password?token={reset_password_token.key}"
     }
 
     # Renderizamos plantilla HTML o texto

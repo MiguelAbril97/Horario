@@ -5,7 +5,8 @@ from django.conf import settings
 from django.template.loader import render_to_string
 import environ
 import os
-import Path
+from pathlib import Path
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 environ.Env.read_env(os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env'))

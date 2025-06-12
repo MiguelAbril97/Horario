@@ -38,7 +38,7 @@ Repositorio que contiene el frontend y backend para montar la aplicación fácil
 
 3. **Levanta los servicios con Docker**
    ```bash
-   docker-compose up
+   docker-compose up -d
    ```
 
 4. **Inicializa la base de datos y el superusuario**

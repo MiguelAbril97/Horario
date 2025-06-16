@@ -198,11 +198,11 @@ async function enviarPartePorCorreo() {
       </div>
     </div>
     <div class="container mt-5">
-      <h2>Ausencias del usuario</h2>
       <div v-if="misAusencias.length > 0">
         <AusenciasUsuario
           :misAusencias="misAusencias"
           :profesor="profesor"
+          :acciones="false"
           @justificar="justificarAusencia"
           @eliminar="deleteAusencia"
         />

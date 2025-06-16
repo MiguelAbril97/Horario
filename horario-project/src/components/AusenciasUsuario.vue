@@ -11,7 +11,7 @@
         style="cursor:pointer"
       >
         {{ ausencia.fecha }} / {{ ausencia.horario?.hora || '-' }}
-        <div v-if="profesor && (profesor.rol == 1 || profesor.is_superuser)">
+        <div v-if="acciones && profesor && (profesor.rol == 1 || profesor.is_superuser)">
           <button
             type="button"
             class="btn btn-outline-success btn-sm mx-2"
@@ -48,7 +48,11 @@ import ConfirmModal from './ConfirmModal.vue';
 
 defineProps({
   misAusencias: Array,
-  profesor: Object
+  profesor: Object,
+  acciones: {
+    type: Boolean,
+    default: true
+  }
 })
 const emit = defineEmits(['justificar', 'eliminar', 'ver-detalle'])
 

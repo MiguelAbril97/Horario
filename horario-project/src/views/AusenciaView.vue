@@ -5,6 +5,7 @@ import { getAusenciasFecha, getAusenciasProfe, getHorariosDia,
 import { useUserStore } from '@/stores/usuario' 
 import html2pdf from 'html2pdf.js';
 import AusenciasUsuario from '@/components/AusenciasUsuario.vue';
+import AusenciaDetails from '@/components/AusenciaDetails.vue';
 
 function getDiaSemanaLetra(fecha) {
   const dias = ['D', 'L', 'M', 'X', 'J', 'V', 'S'];
@@ -35,6 +36,8 @@ const error = ref(null);
 const misAusencias = ref([]);
 const pdfError = ref(null);
 const loading = ref(false);
+const showDetalle = ref(false);
+const detalleAusencia = ref(null);
 
 const cargarDatos = async () => {
   loading.value = true;
@@ -58,6 +61,26 @@ const cargarDatos = async () => {
 }
 
 onMounted(cargarDatos)
+
+async function verDetalleAusencia(id) {
+  showDetalle.value = true;
+  detalleAusencia.value = null;
+  try {
+    // Busca la ausencia en misAusencias
+    const ausencia = misAusencias.value.find(a => a.id === id);
+    if (ausencia) {
+      detalleAusencia.value = ausencia;
+    } else {
+      detalleAusencia.value = { fecha: '', justificada: false, motivo: 'No encontrada' };
+    }
+  } catch (err) {
+    detalleAusencia.value = { fecha: '', justificada: false, motivo: 'Error al cargar' };
+  }
+}
+function cerrarDetalle() {
+  showDetalle.value = false;
+  detalleAusencia.value = null;
+}
 
 // --- FUNCIONES PARA LA TABLA ---
 
@@ -205,12 +228,18 @@ async function enviarPartePorCorreo() {
           :acciones="false"
           @justificar="justificarAusencia"
           @eliminar="deleteAusencia"
+          @ver-detalle="verDetalleAusencia"
         />
       </div>
       <div v-else>
         <div class="alert alert-info"><span class="text-dark">No hay ausencias registradas.</span></div>
       </div>
     </div>
+    <AusenciaDetails
+      :visible="showDetalle"
+      :ausencia="detalleAusencia"
+      @close="cerrarDetalle"
+    />
   </div>
 </template>
 

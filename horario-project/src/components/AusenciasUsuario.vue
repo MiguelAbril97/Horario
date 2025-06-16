@@ -23,7 +23,7 @@
           <button
             type="button"
             class="btn btn-outline-danger btn-sm"
-            @click.stop="$emit('eliminar', ausencia.id)"
+            @click.stop="pedirConfirmacion(ausencia.id)"
             >
             Eliminar
           </button>
@@ -33,12 +33,39 @@
     <div v-else>
       <div class="alert alert-info"><span class="text-dark">No hay ausencias registradas.</span></div>
     </div>
+    <ConfirmModal
+      :visible="showModal"
+      title="Confirmar eliminación"
+      message="¿Estás seguro de que deseas eliminar esta ausencia?"
+      @close="cancelarEliminacion"
+      @confirm="confirmarEliminacion"
+    />
   </div>
 </template>
 <script setup>
+import { ref } from 'vue';
+import ConfirmModal from './ConfirmModal.vue';
+
 defineProps({
   misAusencias: Array,
   profesor: Object
 })
-defineEmits(['justificar', 'eliminar'])
+const emit = defineEmits(['justificar', 'eliminar', 'ver-detalle'])
+
+const showModal = ref(false);
+const ausenciaAEliminar = ref(null);
+
+function pedirConfirmacion(id) {
+  ausenciaAEliminar.value = id;
+  showModal.value = true;
+}
+function cancelarEliminacion() {
+  showModal.value = false;
+  ausenciaAEliminar.value = null;
+}
+function confirmarEliminacion() {
+  emit('eliminar', ausenciaAEliminar.value);
+  showModal.value = false;
+  ausenciaAEliminar.value = null;
+}
 </script>
